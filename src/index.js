@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import SpinnerComponent from "./SpinnerComponent.vue";
+import LoaderComponent from "./LoaderComponent.vue";
 
-const app = createApp(SpinnerComponent);
+const app = createApp(LoaderComponent);
 app.mount("#content");
