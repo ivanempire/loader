@@ -7,11 +7,11 @@ module.exports = {
     mode: "development",
     output: {
         filename: "loader.js",
-        path: path.resolve(__dirname, "dist")
+        path: path.resolve(__dirname, "docs")
     },
     devServer: {
         publicPath: "/",
-        contentBase: path.resolve(__dirname, "dist"),
+        contentBase: path.resolve(__dirname, "docs"),
         hot: true,
         inline: true,
         port: 8000
