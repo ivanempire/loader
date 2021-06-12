@@ -6,12 +6,21 @@
 
 <script>
 
-  import { select, arc, range, easeLinear, interpolate } from "d3";
+  import { select, arc, range, interpolate, easePolyInOut } from "d3";
   import { onMounted } from "vue";
 
   // Dimensions for the SVG container
   const CONTAINER_WIDTH = 400;
   const CONTAINER_HEIGHT = 400;
+
+  // Arc thickness
+  const ARC_OUTER_RADIUS = 200;
+  const ARC_INNER_RADIUS = 150;
+  const ARC_CORNER_RADIUS = (ARC_OUTER_RADIUS - ARC_INNER_RADIUS) / 2
+
+  // Transition settings - delay offset was eyeballed to remove the pause between animation cycles
+  const TRANSITION_DURATION = 750;
+  const TRANSITION_DELAY_CONSTANT_OFFSET = 400;
 
   /**
    * Some variables for customization, although I haven't messed around with these after publishing :P
@@ -55,9 +64,9 @@
             .attr("fill", "url('#loaderGradient')")
 
         let arcGenerator = arc()
-            .innerRadius(150)
-            .outerRadius(200)
-            .cornerRadius(25);
+            .innerRadius(ARC_INNER_RADIUS)
+            .outerRadius(ARC_OUTER_RADIUS)
+            .cornerRadius(ARC_CORNER_RADIUS);
 
         // Angle data over which D3 will iterate to draw the arcs
         let arcData = range(ELEMENT_COUNT).map(item => {
@@ -86,9 +95,9 @@
 
         function animateLoader() {
           arcs.transition()
-              .ease(easeLinear)
-              .duration(750)
-              .delay((d, i) => { return (ELEMENT_COUNT - 1 - i) * 400; })
+              .ease(easePolyInOut)
+              .duration(TRANSITION_DURATION)
+              .delay((d, i) => { return (ELEMENT_COUNT - 1 - i) * TRANSITION_DELAY_CONSTANT_OFFSET; })
               .attrTween("d", (d) => {
                 // Compute the new angles by adding Math.PI, but accounting for the shift via ELEMENT_BUFFER
                 let finalAngles = {
